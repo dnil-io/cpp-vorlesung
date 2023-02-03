@@ -13,6 +13,7 @@ class NumberUI {
     void readRepresentationMode();
     void readNumber();
     void printNumber();
+    void changeNumber();
   private:        
     RepresentationMode representationMode;
     UserMode userMode = input;

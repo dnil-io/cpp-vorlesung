@@ -13,6 +13,7 @@ void NumberUI::run() {
       NumberUI::printNumber();
     }
     NumberUI::readUserMode();
+    NumberUI::changeNumber();
   } 
 }
 
@@ -70,7 +71,6 @@ void NumberUI::readNumber() {
       continue;
     }
 
-
     if(representationMode == RepresentationMode::cartesian) {
       CartesianCoordinates coords = {convertedI, convertedII};
       number.setCartesian(&coords);
@@ -81,6 +81,25 @@ void NumberUI::readNumber() {
       break;
     }
   }
+}
+
+void NumberUI::changeNumber() {
+    std::string changeRequest;
+    std::cout << "Do you want to cahnge any number/parameter? (y/n): ";
+    getline(std::cin,changeRequest);
+    if (changeRequest == "y") {
+        std::string changeAmount;
+        std::cout << "Do you want to change one or two numbers/Parameters? (1/2): ";
+        getline(std::cin, changeAmount);
+        if (changeAmount == "2") {
+            NumberUI::readNumber();
+        }else if(changeAmount == "1") {
+            std::cout << "change one";
+        }
+        else {
+            std::cout << "change aborded dur to illegal statement";
+        }
+    }
 }
 
 void NumberUI::printNumber() {
