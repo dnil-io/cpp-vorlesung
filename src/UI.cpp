@@ -55,14 +55,23 @@ void NumberUI::readNumber() {
   std::string buffer;
   char* parseResult;
   while(true) {
-    std::cout << "a: ";
+    if(NumberUI::representationMode == polar){
+        std::cout << "r: ";
+    }else{
+        std::cout << "a: ";
+    }
     std::getline(std::cin, buffer);
     double convertedI = strtod(buffer.c_str(), &parseResult);
     if(*parseResult) {
       std::cout << "try again\n";
       continue;
     }
-    std::cout << "b: ";
+    if (NumberUI::representationMode == polar) {
+        std::cout << "i: ";
+    }
+    else {
+        std::cout << "b: ";
+    }
     std::getline(std::cin, buffer);
     double convertedII = strtod(buffer.c_str(), &parseResult);
 
@@ -97,7 +106,7 @@ void NumberUI::changeNumber() {
             std::cout << "change one";
         }
         else {
-            std::cout << "change aborded dur to illegal statement";
+            std::cout << "change aborded due to illegal statement";
         }
     }
 }
