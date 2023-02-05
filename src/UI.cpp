@@ -19,7 +19,7 @@ void NumberUI::run() {
 void NumberUI::readRepresentationMode() {
   std::string representationMode;
   while(representationMode != "c" && representationMode != "p") {
-    std::cout << "representation mode? (c/p): ";
+    std::cout << "representation mode? (c/p) (cartesian/polar): ";
     std::getline(std::cin, representationMode);
 
     if(representationMode == "c") {
@@ -54,14 +54,14 @@ void NumberUI::readNumber() {
   std::string buffer;
   char* parseResult;
   while(true) {
-    std::cout << "a: ";
+    std::cout << "x: ";
     std::getline(std::cin, buffer);
     double convertedI = strtod(buffer.c_str(), &parseResult);
     if(*parseResult) {
       std::cout << "try again\n";
       continue;
     }
-    std::cout << "b: ";
+    std::cout << "y: ";
     std::getline(std::cin, buffer);
     double convertedII = strtod(buffer.c_str(), &parseResult);
 
@@ -85,10 +85,10 @@ void NumberUI::readNumber() {
 
 void NumberUI::printNumber() {
   if(representationMode == RepresentationMode::cartesian) {
-    CartesianCoordinates coords = number.getCartesian();
-    std::cout << "a: " << coords.a << "; b:" << coords.b << std::endl;
+    CartesianCoordinates coords = number.getAsCartesian();
+    std::cout << "x: " << coords.x << "; y:" << coords.y << std::endl;
   } else if (representationMode == RepresentationMode::polar) {
-    PolarCoordinates coords = number.getPolar();
+    PolarCoordinates coords = number.getAsPolar();
     std::cout << "r: " << coords.r << "; phi:" << coords.phi << "rad" << std::endl;
   }
 }

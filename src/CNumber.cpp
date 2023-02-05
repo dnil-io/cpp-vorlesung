@@ -1,30 +1,45 @@
 #include <cmath>
 #include "../include/CNumber.h"
 
-void CNumber::setCartesian(CartesianCoordinates* coords) {
-  a = coords->a;
-  b = coords->b;
+CartesianCoordinates CNumber::getAsCartesian() {
+    return this->cartesianCoordinates;
 }
 
-void CNumber::setPolar(PolarCoordinates* coords) {
-  a = coords->r * (cos(coords->phi));
-  b = coords->r * (sin(coords->phi));
+PolarCoordinates CNumber::getAsPolar() {
+    return this->polarCoordinates;
 }
 
-PolarCoordinates CNumber::getPolar() {
-  PolarCoordinates result;
+void CNumber::setCartesian(std::optional<double> x, std::optional<double> y) {
+    auto coords = CartesianCoordinates{
+            .x =  x.value_or(this->getAsCartesian().x),
+            .y =  y.value_or(this->getAsCartesian().y)
+    };
 
-  result.r = sqrt(a*a + b*b);
-  result.phi = atan(b / a);
-
-  return result;
+    this->cartesianCoordinates = coords;
+    this->polarCoordinates = fromCartesian(coords);
 }
 
-CartesianCoordinates CNumber::getCartesian() {
-  CartesianCoordinates result;
+void CNumber::setPolar(std::optional<double> r, std::optional<double> phi) {
+    auto coords = PolarCoordinates{
+            .r = r.value_or(this->getAsPolar().r),
+            .phi = phi.value_or(this->getAsPolar().phi)
+    };
 
-  result.a = a;
-  result.b = b;
+    this->polarCoordinates = coords;
+    this->cartesianCoordinates = fromPolar(coords);
+}
 
-  return result;
+
+PolarCoordinates CNumber::fromCartesian(CartesianCoordinates &coords) {
+    return PolarCoordinates{
+            .r = sqrt(pow(coords.x, 2) + pow(coords.y, 2)),
+            .phi = atan2(coords.y, coords.x)
+    };
+}
+
+CartesianCoordinates CNumber::fromPolar(PolarCoordinates &coords) {
+    return CartesianCoordinates{
+        .x = coords.r * cos(coords.phi),
+        .y = coords.r * sin(coords.phi)
+    };
 }
