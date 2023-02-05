@@ -103,7 +103,34 @@ void NumberUI::changeNumber() {
         if (changeAmount == "2") {
             NumberUI::readNumber();
         }else if(changeAmount == "1") {
-            std::cout << "change one";
+            std::string changingParameter;
+            double changingValue;
+            if (NumberUI::representationMode == polar) {
+                std::cout << "What parameter do you want to chnage? (i/r): ";
+                getline(std::cin, changingParameter);
+                if(changingParameter == "i") {
+                    std::cout << "i:";
+                    std::cin >> changingValue;
+                }
+                else
+                {
+                    std::cout << "r:";
+                    std::cin >> changingValue;
+                }
+            }
+            else {
+                std::cout << "What parameter do you want to chnage? (a/b): ";
+                getline(std::cin, changingParameter);
+                if (changingParameter == "a") {
+                    std::cout << "a:";
+                    std::cin >> changingValue;
+                }
+                else
+                {
+                    std::cout << "b:";
+                    std::cin >> changingValue;
+                }
+            }
         }
         else {
             std::cout << "change aborded due to illegal statement";
