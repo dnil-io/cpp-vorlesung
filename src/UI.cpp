@@ -13,6 +13,7 @@ void NumberUI::run() {
       NumberUI::printNumber();
     }
     NumberUI::readUserMode();
+    NumberUI::changeNumber();
   } 
 }
 
@@ -54,14 +55,23 @@ void NumberUI::readNumber() {
   std::string buffer;
   char* parseResult;
   while(true) {
-    std::cout << "x: ";
+    if(NumberUI::representationMode == polar){
+        std::cout << "r: ";
+    }else{
+        std::cout << "a: ";
+    }
     std::getline(std::cin, buffer);
     double convertedI = strtod(buffer.c_str(), &parseResult);
     if(*parseResult) {
       std::cout << "try again\n";
       continue;
     }
-    std::cout << "y: ";
+    if (NumberUI::representationMode == polar) {
+        std::cout << "i: ";
+    }
+    else {
+        std::cout << "b: ";
+    }
     std::getline(std::cin, buffer);
     double convertedII = strtod(buffer.c_str(), &parseResult);
 
@@ -69,7 +79,6 @@ void NumberUI::readNumber() {
       std::cout << "try again\n";
       continue;
     }
-
 
     if(representationMode == RepresentationMode::cartesian) {
       CartesianCoordinates coords = {convertedI, convertedII};
@@ -81,6 +90,52 @@ void NumberUI::readNumber() {
       break;
     }
   }
+}
+
+void NumberUI::changeNumber() {
+    std::string changeRequest;
+    std::cout << "Do you want to cahnge any number/parameter? (y/n): ";
+    getline(std::cin,changeRequest);
+    if (changeRequest == "y") {
+        std::string changeAmount;
+        std::cout << "Do you want to change one or two numbers/Parameters? (1/2): ";
+        getline(std::cin, changeAmount);
+        if (changeAmount == "2") {
+            NumberUI::readNumber();
+        }else if(changeAmount == "1") {
+            std::string changingParameter;
+            double changingValue;
+            if (NumberUI::representationMode == polar) {
+                std::cout << "What parameter do you want to chnage? (i/r): ";
+                getline(std::cin, changingParameter);
+                if(changingParameter == "i") {
+                    std::cout << "i:";
+                    std::cin >> changingValue;
+                }
+                else
+                {
+                    std::cout << "r:";
+                    std::cin >> changingValue;
+                }
+            }
+            else {
+                std::cout << "What parameter do you want to chnage? (a/b): ";
+                getline(std::cin, changingParameter);
+                if (changingParameter == "a") {
+                    std::cout << "a:";
+                    std::cin >> changingValue;
+                }
+                else
+                {
+                    std::cout << "b:";
+                    std::cin >> changingValue;
+                }
+            }
+        }
+        else {
+            std::cout << "change aborded due to illegal statement";
+        }
+    }
 }
 
 void NumberUI::printNumber() {
