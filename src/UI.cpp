@@ -73,11 +73,11 @@ void NumberUI::readNumber() {
 
     if(representationMode == RepresentationMode::cartesian) {
       CartesianCoordinates coords = {convertedI, convertedII};
-      number.setCartesian(&coords);
+      number.setCartesian(std::make_optional(coords.x), std::make_optional(coords.y));
       break;
     } else if (representationMode == RepresentationMode::polar) {
       PolarCoordinates coords = {convertedI, convertedII};
-      number.setPolar(&coords);      
+      number.setPolar(std::make_optional(coords.r), std::make_optional(coords.phi));
       break;
     }
   }
