@@ -5,22 +5,23 @@
 #include "../include/CNumber.h"
 
 void NumberUI::run() {
+  NumberUI::readRepresentationMode();
+  NumberUI::readNumber();
   while (true) {
+    NumberUI::readUserMode();
     NumberUI::readRepresentationMode();
     if(NumberUI::userMode == UserMode::input) {
-      NumberUI::readNumber();
+      NumberUI::changeNumber();
     } else {
       NumberUI::printNumber();
     }
-    NumberUI::readUserMode();
-    NumberUI::changeNumber();
   } 
 }
 
 void NumberUI::readRepresentationMode() {
   std::string representationMode;
   while(representationMode != "c" && representationMode != "p") {
-    std::cout << "representation mode? (c/p) (cartesian/polar): ";
+    std::cout << "cartesian or polar? (c/p) : ";
     std::getline(std::cin, representationMode);
 
     if(representationMode == "c") {
@@ -93,48 +94,50 @@ void NumberUI::readNumber() {
 }
 
 void NumberUI::changeNumber() {
-    std::string changeRequest;
-    std::cout << "Do you want to cahnge any number/parameter? (y/n): ";
-    getline(std::cin,changeRequest);
-    if (changeRequest == "y") {
+    if (NumberUI::userMode == UserMode::input) {
         std::string changeAmount;
-        std::cout << "Do you want to change one or two numbers/Parameters? (1/2): ";
+        std::cout << "Do you want to change one or two numbers/parameters? (1/2): ";
         getline(std::cin, changeAmount);
         if (changeAmount == "2") {
             NumberUI::readNumber();
         }else if(changeAmount == "1") {
             std::string changingParameter;
-            double changingValue;
+            std::string changingValueStr;
             if (NumberUI::representationMode == polar) {
-                std::cout << "What parameter do you want to chnage? (i/r): ";
+                std::cout << "What parameter do you want to change? (i/r): ";
                 getline(std::cin, changingParameter);
                 if(changingParameter == "i") {
                     std::cout << "i:";
-                    std::cin >> changingValue;
+                    getline(std::cin, changingValueStr);
+                    number.setPolar(std::nullopt, std::make_optional(atof(changingValueStr.c_str())));
                 }
                 else
                 {
                     std::cout << "r:";
-                    std::cin >> changingValue;
+                    getline(std::cin, changingValueStr);
+                    number.setPolar(std::make_optional(atof(changingValueStr.c_str())), std::nullopt);
                 }
             }
             else {
-                std::cout << "What parameter do you want to chnage? (a/b): ";
+                std::cout << "What parameter do you want to change? (a/b): ";
                 getline(std::cin, changingParameter);
                 if (changingParameter == "a") {
                     std::cout << "a:";
-                    std::cin >> changingValue;
+                    getline(std::cin, changingValueStr);
+                    number.setCartesian(std::nullopt, std::make_optional(atof(changingValueStr.c_str())));
                 }
                 else
                 {
                     std::cout << "b:";
-                    std::cin >> changingValue;
+                    getline(std::cin, changingValueStr);
+                    number.setCartesian(std::make_optional(atof(changingValueStr.c_str())), std::nullopt);
                 }
             }
         }
         else {
             std::cout << "change aborded due to illegal statement";
         }
+
     }
 }
 
