@@ -5,21 +5,23 @@
 #include "../include/CNumber.h"
 
 void NumberUI::run() {
+  NumberUI::readRepresentationMode();
+  NumberUI::readNumber();
   while (true) {
+    NumberUI::readUserMode();
     NumberUI::readRepresentationMode();
     if(NumberUI::userMode == UserMode::input) {
-      NumberUI::readNumber();
+      NumberUI::changeNumber();
     } else {
       NumberUI::printNumber();
     }
-    NumberUI::readUserMode();
   } 
 }
 
 void NumberUI::readRepresentationMode() {
   std::string representationMode;
   while(representationMode != "c" && representationMode != "p") {
-    std::cout << "representation mode? (c/p) (cartesian/polar): ";
+    std::cout << "cartesian or polar? (c/p) : ";
     std::getline(std::cin, representationMode);
 
     if(representationMode == "c") {
@@ -54,14 +56,23 @@ void NumberUI::readNumber() {
   std::string buffer;
   char* parseResult;
   while(true) {
-    std::cout << "x: ";
+    if(NumberUI::representationMode == polar){
+        std::cout << "r: ";
+    }else{
+        std::cout << "a: ";
+    }
     std::getline(std::cin, buffer);
     double convertedI = strtod(buffer.c_str(), &parseResult);
     if(*parseResult) {
       std::cout << "try again\n";
       continue;
     }
-    std::cout << "y: ";
+    if (NumberUI::representationMode == polar) {
+        std::cout << "i: ";
+    }
+    else {
+        std::cout << "b: ";
+    }
     std::getline(std::cin, buffer);
     double convertedII = strtod(buffer.c_str(), &parseResult);
 
@@ -70,17 +81,64 @@ void NumberUI::readNumber() {
       continue;
     }
 
-
     if(representationMode == RepresentationMode::cartesian) {
       CartesianCoordinates coords = {convertedI, convertedII};
-      number.setCartesian(&coords);
+      number.setCartesian(std::make_optional(coords.x), std::make_optional(coords.y));
       break;
     } else if (representationMode == RepresentationMode::polar) {
       PolarCoordinates coords = {convertedI, convertedII};
-      number.setPolar(&coords);      
+      number.setPolar(std::make_optional(coords.r), std::make_optional(coords.phi));
       break;
     }
   }
+}
+
+void NumberUI::changeNumber() {
+    if (NumberUI::userMode == UserMode::input) {
+        std::string changeAmount;
+        std::cout << "Do you want to change one or two numbers/parameters? (1/2): ";
+        getline(std::cin, changeAmount);
+        if (changeAmount == "2") {
+            NumberUI::readNumber();
+        }else if(changeAmount == "1") {
+            std::string changingParameter;
+            std::string changingValueStr;
+            if (NumberUI::representationMode == polar) {
+                std::cout << "What parameter do you want to change? (i/r): ";
+                getline(std::cin, changingParameter);
+                if(changingParameter == "i") {
+                    std::cout << "i:";
+                    getline(std::cin, changingValueStr);
+                    number.setPolar(std::nullopt, std::make_optional(atof(changingValueStr.c_str())));
+                }
+                else
+                {
+                    std::cout << "r:";
+                    getline(std::cin, changingValueStr);
+                    number.setPolar(std::make_optional(atof(changingValueStr.c_str())), std::nullopt);
+                }
+            }
+            else {
+                std::cout << "What parameter do you want to change? (a/b): ";
+                getline(std::cin, changingParameter);
+                if (changingParameter == "a") {
+                    std::cout << "a:";
+                    getline(std::cin, changingValueStr);
+                    number.setCartesian(std::nullopt, std::make_optional(atof(changingValueStr.c_str())));
+                }
+                else
+                {
+                    std::cout << "b:";
+                    getline(std::cin, changingValueStr);
+                    number.setCartesian(std::make_optional(atof(changingValueStr.c_str())), std::nullopt);
+                }
+            }
+        }
+        else {
+            std::cout << "change aborded due to illegal statement";
+        }
+
+    }
 }
 
 void NumberUI::printNumber() {
