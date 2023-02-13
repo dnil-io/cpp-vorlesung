@@ -11,8 +11,37 @@ struct CartesianCoordinates {
     double x = 0, y = 0;
 };
 
+struct PracticeCartesianCoordinates {       //Aufg 2.4
+    float x = 0, y = 0;
+
+
+    PracticeCartesianCoordinates(float x_value, float y_value) : x(x_value), y(y_value) {}
+
+};
+
 class CNumber {
 public:
+
+    CNumber(double x = 3, double y = 4) : x(x), y(y) {      //Constructer creates cartesian objects x and y as parameter
+        x = x;
+        y = y;
+    }
+
+    CNumber() : x(3), y(4)
+    {
+    
+    }
+
+    CNumber(double a) {     //Aufg 2.5
+        if (a < 0) {
+            setPolar(a, 0.7853981634);
+        }
+        else {
+            setPolar(a, -0.7853981634);
+        }
+    }
+
+
     void setCartesian(std::optional<double> x = std::nullopt, std::optional<double> y = std::nullopt);
 
     void setPolar(std::optional<double> r = std::nullopt, std::optional<double> phi = std::nullopt);
@@ -28,6 +57,9 @@ private:
     static PolarCoordinates fromCartesian(CartesianCoordinates &coords);
 
     static CartesianCoordinates fromPolar(PolarCoordinates &coords);
+
+    double x;
+    double y;
 };
 
 #endif

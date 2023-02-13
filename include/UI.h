@@ -8,6 +8,8 @@ enum UserMode { input, output};
 
 class NumberUI {
   public:    
+
+      NumberUI();
     void run();
     void readUserMode();
     void readRepresentationMode();

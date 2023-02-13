@@ -9,6 +9,10 @@ PolarCoordinates CNumber::getAsPolar() {
     return this->polarCoordinates;
 }
 
+//Object of CNumber named cartesian1 is created
+//CNumber cartesian2 = CNumber(2);
+CNumber cartesian3 = CNumber(2, 5);
+
 void CNumber::setCartesian(std::optional<double> x, std::optional<double> y) {
     auto coords = CartesianCoordinates{
             .x =  x.value_or(this->getAsCartesian().x),
