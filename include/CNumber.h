@@ -11,7 +11,7 @@ struct CartesianCoordinates {
     double x = 0, y = 0;
 };
 
-struct PracticeCartesianCoordinates {       //Aufg 2.4
+struct PracticeCartesianCoordinates {       //zu Aufg 2.4
     float x = 0, y = 0;
 
 
