@@ -4,6 +4,10 @@
 #include "../include/UI.h"
 #include "../include/CNumber.h"
 
+NumberUI::NumberUI()
+{
+}
+
 void NumberUI::run() {
   NumberUI::readRepresentationMode();
   NumberUI::readNumber();

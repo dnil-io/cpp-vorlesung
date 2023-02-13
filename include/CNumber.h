@@ -22,15 +22,17 @@ struct PracticeCartesianCoordinates {       //Aufg 2.4
 class CNumber {
 public:
 
-    CNumber(double x = 3, double y = 4) : x(x), y(y) {      //Constructer creates cartesian objects x and y as parameter
-        x = x;
-        y = y;
-    }
+    CNumber(PolarCoordinates c = { 1,2 }) : polarCoordinates(c) {}      //Constructer creates cartesian objects
 
-    CNumber() : x(3), y(4)
+    CNumber(CartesianCoordinates c = { 1,2 }) : cartesianCoordinates(c) {}      //Constructer creates polar objects
+
+    CNumber(){}
+
+   /* CNumber() : x(3), y(4)    is a comment because otherwise in UI.h the number Object dosent know which Constructor to use
     {
     
     }
+    */
 
     CNumber(double a) {     //Aufg 2.5
         if (a < 0) {
@@ -57,9 +59,6 @@ private:
     static PolarCoordinates fromCartesian(CartesianCoordinates &coords);
 
     static CartesianCoordinates fromPolar(PolarCoordinates &coords);
-
-    double x;
-    double y;
 };
 
 #endif
