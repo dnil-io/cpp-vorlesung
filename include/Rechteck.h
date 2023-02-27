@@ -1,6 +1,7 @@
 #ifndef RECHTECK_H
 #define RECHTECK_H
 
+#include <iostream>
 #include "ZeichenElement.h"
 
 class Rechteck : public ZeichenElement 
@@ -11,6 +12,9 @@ public:
     int getWidth();
     virtual double getArea();
     virtual double getCircumrefrence();
+    virtual ZeichenType getType();
+    operator std::string() const;
+
 private:
     int height;
     int width;

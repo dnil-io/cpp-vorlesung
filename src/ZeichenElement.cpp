@@ -1,6 +1,6 @@
 #include "../include/ZeichenElement.h"
 #include "../include/Koordinate.h"
 
-Koordinate ZeichenElement::getKoordinate() {
+Koordinate ZeichenElement::getKoordinate() const {
     return this->koordinate;
 }

@@ -1,5 +1,6 @@
 #ifndef KOORDINATE_H
 #define KOORDINATE_H
+#include <iostream>
 
 class Koordinate {
 public:
@@ -8,6 +9,7 @@ public:
 
     int getX();
     int getY();
+    operator std::string() const;
 private:
     int x;
     int y;
