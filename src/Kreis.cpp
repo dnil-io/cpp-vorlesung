@@ -4,7 +4,7 @@
 #include <cmath>
 
 double Kreis::getArea() {
-    return std::abs(this->radius + this->radius * 2 * PI);
+    return std::abs(this->radius * this->radius * 2 * PI);
 }
 
 double Kreis::getCircumrefrence() {
