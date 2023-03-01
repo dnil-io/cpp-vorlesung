@@ -3,6 +3,7 @@
 #include "Koordinate.h"
 #include "ZeichenElement.h"
 #include <iostream>
+#include <stdlib.h>
 
 ZeichenElement* storage[10] = {}; 
 int storageIndex = 0;
@@ -23,68 +24,97 @@ void printStorageItem(int index) {
     std::cout << output << std::endl;
 }
 
-void printStorage(ZeichenType filter, bool filterB) {
+void printStorage() {
     double circumrefrence = 0;
     double area = 0;
-    if(storageIndex < 10) {
-        for(int i = 0; i < storageIndex; i++) {
-            if((*storage[i]).getType() == filter && filterB) {
-                printStorageItem(i);
-                circumrefrence += (*storage[i]).getCircumrefrence();
-                area += (*storage[i]).getArea();
-            } else if(!filterB) {
-                printStorageItem(i);
-            }
-        }
-    } else {
-        for(int i = 0; i < 10; i++) {
-            int calcIndex = (storageIndex+i) % 10;
-            if((*storage[calcIndex]).getType() == filter && filterB) {
-                printStorageItem(calcIndex);
-                circumrefrence += (*storage[calcIndex]).getCircumrefrence();
-                area += (*storage[calcIndex]).getArea();
-            } else if(!filterB) { 
-                printStorageItem(calcIndex);
-            }
-        }
+    
+    for(int i = 0; i < std::min(storageIndex, 10); i++) {
+        int calcIndex = ((storageIndex > 10 ? storageIndex : 0) + i) % 10; //
+        printStorageItem(calcIndex);
+        circumrefrence += (*storage[calcIndex]).getCircumrefrence();
+        area += (*storage[calcIndex]).getArea();
     }
-    if (filterB) {
-        std::cout << "umfang: "<< circumrefrence << std::endl;
-        std::cout << "fläche: "<< area << std::endl;
+    
+    std::cout << "Umfang: "<< circumrefrence << std::endl;
+    std::cout << "Fläche: "<< area << std::endl;
+}
+
+void printStorageSorted(ZeichenType filter) {
+    double circumrefrence = 0;
+    double area = 0;
+
+    for(int i = 0; i < std::min(storageIndex, 10); i++) {
+        int calcIndex = ((storageIndex > 10 ? storageIndex : 0) + i) % 10;
+        if((*storage[calcIndex]).getType() == filter) {
+            printStorageItem(calcIndex);
+            circumrefrence += (*storage[calcIndex]).getCircumrefrence();
+            area += (*storage[calcIndex]).getArea();
+        }
+    } 
+
+    std::cout << "Umfang: "<< circumrefrence << std::endl;
+    std::cout << "Fläche: "<< area << std::endl;
+
+}
+
+void input_menu() {
+    std::string input_line;
+    std::cout << "Zeichenelement erstellen \n\n1: Kreis\n2: Rechteck\n\n> ";
+    std::getline(std::cin, input_line);
+    ZeichenElement* el;
+    if(input_line == "1") {
+        Koordinate koordinate = readKoordinate();
+        Kreis* k = new Kreis(koordinate, readInt("radius"));
+        el = k;
+    } else if(input_line == "2") {
+        Koordinate koordinate = readKoordinate();
+        Rechteck* r = new Rechteck(koordinate, readInt("height"), readInt("width"));
+        el = r;
+    } else {
+        std::cout << "-- NO VALID INPUT, USE \"kreis\" or \"rechteck\" --" << std::endl;
+        return;
+    }
+    storage[(storageIndex++) % 10] = el; 
+}
+
+void output_menu() {
+    std::string input_line;
+    std::cout << "Zeichenelemente anzeigen \n\n1: in Reihenfolge der Eingabe(gemischt)\n2: sortiert: erst Kreise dann Rechtecke\n\n> ";
+    std::getline(std::cin, input_line);
+    ZeichenElement* el;
+    if(input_line == "1") {
+        std::cout << "\nin Reihenfolge der Eingabe(gemischt):\n\n";
+        printStorage();
+    } else if(input_line == "2") {
+        std::cout << "\nsortiert: erst Kreise dann Rechtecke\n\n";
+        std::cout << "Kreise: " << std::endl;
+        printStorageSorted(ZeichenType::KREIS); 
+        std::cout << std::endl << "Rechtecke: " << std::endl;
+        printStorageSorted(ZeichenType::RECHTECK);
+    } else {
+        std::cout << "-- NO VALID INPUT, USE \"1\" or \"2\" --" << std::endl;
+    }
+}
+
+void menu() {
+    std::string input_line;
+    std::cout << "MENU \n\n1: Zeichenelement erstellen\n2: Zeichenelemente anzeigen\n3: Programm beenden\n\n> ";
+    std::getline(std::cin, input_line);
+    if(input_line == "1") {
+        input_menu();
+    } else if(input_line == "2") {
+        output_menu();
+    } else if(input_line == "3") {
+        std::cout << "\nGoing to sleep!\nError: The operation failed successfully\n";
+        std::exit(0);
+    } else {
+        std::cout << "-- NO VALID INPUT, USE \"1\", \"2\" or \"3\" --" << std::endl;
     }
 }
 
 int main() {
-    std::string input_line;
     while(std::cin) {
-        std::cout << "input (kreis/rechteck)?";
-        std::getline(std::cin, input_line);
-        ZeichenElement* el;
-        if(input_line == "kreis") {
-            Koordinate koordinate = readKoordinate();
-            Kreis* k = new Kreis(koordinate, readInt("radius"));
-            el = k;
-        } else if(input_line == "rechteck") {
-            Koordinate koordinate = readKoordinate();
-            Rechteck* r = new Rechteck(koordinate, readInt("height"), readInt("width"));
-            el = r;
-        } else {
-            std::cout << "try again" << std::endl;
-            continue;
-        }
-        storage[(storageIndex++) % 10] = el; 
-        std::cout << "user input: " << std::endl;
-        
-        printStorage(ZeichenType::KREIS, false);
-        
-        std::cout << "sorted: " << std::endl;
-        std::cout << "kreise: " << std::endl;
-        printStorage(ZeichenType::KREIS, true); 
-        std::cout << std::endl << "rechtecke: " << std::endl;
-        
-        printStorage(ZeichenType::RECHTECK, true);
-
-
+        menu();
     }
 }
 
